@@ -1,11 +1,11 @@
 #ifndef __INSTRUCTION_MAKER_INTERFACE_H_
 #define __INSTRUCTION_MAKER_INTERFACE_H_
 
-#include "instruction.hpp"
+#include "instructions/instruction.hpp"
 
 class InstructionMakerInterface {
     public:
-        virtual Instruction* create(addressing_mode mode, std::shared_ptr<cpu_state> state) const = 0;
+        virtual std::unique_ptr<Instruction> create(addressing_mode mode, std::shared_ptr<cpu_state> state) const = 0;
         virtual ~InstructionMakerInterface() {}
     };
 

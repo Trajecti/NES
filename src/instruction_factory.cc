@@ -1,16 +1,69 @@
 
-#include "../include/instruction_factory.hpp"
+#include "../include/instruction_maker.hpp"
+#include "../include/instructions/branch_instruction.hpp"
+#include "../include/instructions/full_addressing_mode_instruction.hpp"
+#include "../include/instructions/single_byte_instruction.hpp"
+#include "../include/instructions/jump_instruction.hpp"
+#include "../include/instructions/bit_shift_instruction.hpp"
 #include <functional>
 #include <typeinfo>
 #include <typeindex>
 #include <exception>
 
-template <class T>
-class ChildInstructionFactory {
-    T* generate_instruction(int address_mode,std::shared_ptr<cpu_state> state){
-            return &T(address_mode, state);
-    };
-};
+REGISTER_INSTRUCTION(BRKInstruction);
+REGISTER_INSTRUCTION(RTIInstruction);
+REGISTER_INSTRUCTION(RTSInstruction);
+REGISTER_INSTRUCTION(PHPInstruction);
+REGISTER_INSTRUCTION(CLCInstruction);
+REGISTER_INSTRUCTION(PLPInstruction);
+REGISTER_INSTRUCTION(SECInstruction);
+REGISTER_INSTRUCTION(PHAInstruction);
+REGISTER_INSTRUCTION(CLIInstruction);
+REGISTER_INSTRUCTION(PLAInstruction);
+REGISTER_INSTRUCTION(SEIInstruction);
+REGISTER_INSTRUCTION(DEYInstruction);
+REGISTER_INSTRUCTION(TYAInstruction);
+REGISTER_INSTRUCTION(TAYInstruction);
+REGISTER_INSTRUCTION(CLVInstruction);
+REGISTER_INSTRUCTION(INYInstruction);
+REGISTER_INSTRUCTION(CLDInstruction);
+REGISTER_INSTRUCTION(INXInstruction);
+REGISTER_INSTRUCTION(TXAInstruction);
+REGISTER_INSTRUCTION(TXSInstruction);
+REGISTER_INSTRUCTION(TAXInstruction);
+REGISTER_INSTRUCTION(TSXInstruction);
+REGISTER_INSTRUCTION(DEXInstruction);
+REGISTER_INSTRUCTION(NOPInstruction);
+REGISTER_INSTRUCTION(BPLInstruction);
+REGISTER_INSTRUCTION(BMIInstruction);
+REGISTER_INSTRUCTION(BVCInstruction);
+REGISTER_INSTRUCTION(BVSInstruction);
+REGISTER_INSTRUCTION(BCCInstruction);
+REGISTER_INSTRUCTION(BCSInstruction);
+REGISTER_INSTRUCTION(BNEInstruction);
+REGISTER_INSTRUCTION(BEQInstruction);
+REGISTER_INSTRUCTION(ORAInstruction);
+REGISTER_INSTRUCTION(ANDInstruction);
+REGISTER_INSTRUCTION(EORInstruction);
+REGISTER_INSTRUCTION(ADCInstruction);
+REGISTER_INSTRUCTION(STAInstruction);
+REGISTER_INSTRUCTION(LDAInstruction);
+REGISTER_INSTRUCTION(CMPInstruction);
+REGISTER_INSTRUCTION(SBCInstruction);
+REGISTER_INSTRUCTION(BITInstruction);
+REGISTER_INSTRUCTION(JMPInstruction);
+REGISTER_INSTRUCTION(STYInstruction);
+REGISTER_INSTRUCTION(LDYInstruction);
+REGISTER_INSTRUCTION(CPYInstruction);
+REGISTER_INSTRUCTION(CPXInstruction);
+REGISTER_INSTRUCTION(ASLInstruction);
+REGISTER_INSTRUCTION(ROLInstruction);
+REGISTER_INSTRUCTION(LSRInstruction);
+REGISTER_INSTRUCTION(RORInstruction);
+REGISTER_INSTRUCTION(STXInstruction);
+REGISTER_INSTRUCTION(LDXInstruction);
+REGISTER_INSTRUCTION(DECInstruction);
+REGISTER_INSTRUCTION(INCInstruction);
 
 std::map<int, std::string> branch_instruction_map = {{0x10, "BPLInstruction"},
                                                                    {0x30, "BMIInstruction"},
@@ -93,7 +146,7 @@ std::map<std::pair<int, int>, addressing_mode> address_mode_map ={{std::make_pai
                                                                             {std::make_pair(0x111, 0x00), addressing_mode::absolute_x}};
 
 
-Instruction* InstructionFactory::create(std::shared_ptr<cpu_state> state){
+std::unique_ptr<Instruction> InstructionFactory::create(std::shared_ptr<cpu_state> state){
     const int JSR_OPCODE = 0x20;
     const int STX_ZPY_OPCODE = 0x98;
 
